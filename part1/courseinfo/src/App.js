@@ -1,5 +1,5 @@
 const Header = (props) => {
-    console.log('Header : ' + props.course)
+    console.log('Header Component Generated : ' + props.course)
     return (
         <div>
             <h1>
@@ -10,13 +10,25 @@ const Header = (props) => {
 }
 
 const Content = (props) => {
-    console.log('Content : ' + props.name)
+    console.log('Content Component Generated')
     return (
         <div>
-            <p>{props.name} : {props.number}</p>
+            <Part name={props.part1Name} number={props.part1Exercises} />
+            <Part name={props.part2Name} number={props.part2Exercises} />
+            <Part name={props.part3Name} number={props.part3Exercises} />
         </div>
     )
 }
+const Part = (props) => {
+    console.log('Generate Part Component of ' + props.name)
+    return (
+        <div>
+            <p>
+                {props.name} : {props.number}
+            </p>
+        </div>
+    );
+};
 
 const Total = (props) => {
     console.log('Compute number of exercises')
@@ -26,6 +38,7 @@ const Total = (props) => {
         </div>
     )
 }
+
 
 const App = () => {
     const course = 'Half Stack application development'
@@ -39,9 +52,14 @@ const App = () => {
     return (
         <div>
             <Header course = {course}/>
-            <Content name = {part1} number = {exercises1}/>
-            <Content name = {part2} number = {exercises2}/>
-            <Content name = {part3} number = {exercises3}/>
+            <Content
+                part1Name={part1}
+                part1Exercises={exercises1}
+                part2Name={part2}
+                part2Exercises={exercises2}
+                part3Name={part3}
+                part3Exercises={exercises3}
+            />
             <Total number1 = {exercises1}  number2 = {exercises2} number3 = {exercises3}/>
         </div>
     )
