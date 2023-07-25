@@ -19,8 +19,11 @@ const Content = (props) => {
         </div>
     )
 }
+
+let part = 1;
 const Part = (props) => {
-    console.log('Generate Part Component of ' + props.name)
+    console.log('Generate Part ' + part + ' Component of ' + props.name)
+    part++;
     return (
         <div>
             <p>
