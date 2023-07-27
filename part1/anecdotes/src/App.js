@@ -11,20 +11,44 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
+    const [selected, setSelected] = useState(0)
+    const [allVotes, setVotes] = useState([0])
+    //initialize with array of length 1 with element 0
 
-  const [selected, setSelected] = useState(0)
-  const handler = (state,setter) =>{
-    const updatedState = state+1
-    console.log('State of selected :', updatedState)
-    setter(updatedState)
+  const handler = () =>{
+    const updatedState = selected + 1
+    if(updatedState === anecdotes.length){
+      console.log('Going back to state of selected : 0')
+      setSelected(0)
+    }
+    else {
+      //Will add new element 0 --> In the end allVotes[8]==0 --> No anecdotes
+      const copy = [...allVotes, 0]
+      console.log('State of selected :', updatedState)
+      setSelected(updatedState)
+      console.log('copy allVotes')
+      setVotes(copy)
+    }
+  }
+  const handlerVote = () =>{
+    const copy = [...allVotes]
+    copy[selected] += 1
+    console.log('vote pressed')
+    setVotes(copy)
   }
   return (
       <div>
         {anecdotes[selected]}
         <br/>
-        <button onClick={() => handler(selected,setSelected)}>
-          next anecdote
-        </button>
+        {allVotes[8]}
+        has {allVotes[selected]} votes
+        <br/>
+          <button onClick={() => handlerVote(selected,setSelected)}>
+              vote
+          </button>
+          <button onClick={() => handler(selected,setSelected)}>
+              next anecdote
+          </button>
       </div>
   )
 }
