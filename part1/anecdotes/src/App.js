@@ -1,6 +1,24 @@
 import { useState } from 'react'
+const Most = ({anecdotes, allVotes}) => {
+    const maxElement = Math.max(...allVotes)
+    //it won't work if  Math.max(allVotes) because Math.max takes multiple arguments
+    //i.e. Math.max(10, 5, 7, 20, 15, 30)
+    //therefore to spread the array into multiple argument --> use ... operator
+    const index = allVotes.indexOf(maxElement)
+    console.log(allVotes)
+    console.log(maxElement, index)
 
+    return(
+        <div>
+            <h1>Anecdote with most votes</h1>
+            {anecdotes[index]}
+            <br/>
+            has {allVotes[index]} votes
+        </div>
+      )
+}
 const App = () => {
+
   const anecdotes = [
     'If it hurts, do it more often.',
     'Adding manpower to a late software project makes it later!',
@@ -38,9 +56,9 @@ const App = () => {
   }
   return (
       <div>
+        <h1>Anecdote of the day</h1>
         {anecdotes[selected]}
         <br/>
-        {allVotes[8]}
         has {allVotes[selected]} votes
         <br/>
           <button onClick={() => handlerVote(selected,setSelected)}>
@@ -49,6 +67,7 @@ const App = () => {
           <button onClick={() => handler(selected,setSelected)}>
               next anecdote
           </button>
+        <Most anecdotes={anecdotes} allVotes={allVotes}/>
       </div>
   )
 }
