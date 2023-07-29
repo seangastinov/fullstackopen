@@ -38,9 +38,13 @@ const Part = (props) => {
 };
 
 const Total = ({course}) => {
-    console.log('Compute number of exercises')
+    console.log('Total Component Generated')
+    const total = course.parts.reduce((sum, current) => {
+        console.log('what is happening', sum, current)
+        return sum + current.exercises
+    }, 0 )
     return (
-        <b> total of {course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises + course.parts[3].exercises} exercises</b>
+        <b> total of {total} exercises</b>
     )
 }
 
