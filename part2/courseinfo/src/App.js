@@ -19,9 +19,11 @@ const Content = ({course}) => {
     console.log('Content Component Generated')
     return (
         <div>
-            <Part name={course.parts[0].name} number={course.parts[0].exercises} />
-            <Part name={course.parts[1].name} number={course.parts[1].exercises} />
-            <Part name={course.parts[2].name} number={course.parts[2].exercises} />
+            <Part name={course.parts[0].name} number={course.parts[0].exercises}/>
+            <Part name={course.parts[1].name} number={course.parts[1].exercises}/>
+            <Part name={course.parts[2].name} number={course.parts[2].exercises}/>
+            <Part name={course.parts[3].name} number={course.parts[3].exercises}/>
+            <Total course = {course}/>
         </div>
     )
 }
@@ -31,18 +33,16 @@ const Part = (props) => {
     console.log('Generate Part ' + part + ' Component of ' + props.name)
     part++;
     return (
-        <p>{props.name} : {props.number}</p>
+        <p>{props.name} {props.number}</p>
     );
 };
 
-// const Total = (props) => {
-//     console.log('Compute number of exercises')
-//     return (
-//         <div>
-//             <p> Number of exercises : {props.course.parts[0].exercises + props.course.parts[1].exercises + props.course.parts[2].exercises}</p>
-//         </div>
-//     )
-// }
+const Total = ({course}) => {
+    console.log('Compute number of exercises')
+    return (
+        <b> total of {course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises + course.parts[3].exercises} exercises</b>
+    )
+}
 
 const App = () => {
     const course = {
@@ -63,6 +63,11 @@ const App = () => {
                 name: 'State of a component',
                 exercises: 14,
                 id: 3
+            },
+            {
+                name: 'Redux',
+                exercises: 11,
+                id: 4
             }
         ]
     }
