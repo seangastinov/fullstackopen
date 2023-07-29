@@ -1,21 +1,8 @@
 import { useState } from 'react'
+import Filter from './components/Filter'
+import Persons from './components/Persons'
+import PersonForm from './components/PersonForm'
 
-const Name = ({persons, newFilter})=>{
-    const numberToShow = (newFilter === '')
-        ? persons
-        : persons.filter(person =>
-            person.name.toLowerCase().includes(newFilter.toLowerCase()))
-    console.log('numberToShow:',numberToShow)
-
-    const result = numberToShow.map((i) => {
-        return <div key={i.id}>{i.name} {i.number}</div>
-    });
-
-    console.log('persons:',persons)
-    return(
-        <>{result}</>
-    )
-}
 const App = () => {
     const [persons, setPersons] = useState([
         { name: 'Arto Hellas', number: '040-123456', id: 1 },
@@ -25,24 +12,28 @@ const App = () => {
     ])
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
-    const [newFilter, setNewFilter] = useState('Ada Lovelace')
+    const [newFilter, setNewFilter] = useState('')
 
 
     const addHandler = (event)=> {
         event.preventDefault()
-        const check = persons.reduce((checker,current) =>{
-            console.log(checker,current)
-            if(current.name===newName) {
+
+        if (newName === '' || newNumber === ''){
+            return alert("Please insert the name and number")
+        }
+
+        const check = persons.reduce((checker,person) =>{
+            console.log(checker,person)
+            if(person.name === newName) {
                 return false
             }
+            return checker
             },true)
 
         if(check === false){
             return alert(newName + ' is already added to phonebook')
         }
-        else if (newName === '' || newNumber === ''){
-            return alert("Please insert the name and number")
-        }else {
+        else{
             const tempObject = {
                 name: newName, number: newNumber, id:persons[persons.length-1].id + 1
             }
@@ -73,35 +64,15 @@ const App = () => {
     }
 
     return (
-        <div>
-            <h2>Phonebook</h2>
-            <form>
-                <div>
-                    filter shown with <input value={newFilter}
-                                 onChange = {inputFilterChangeHandler}
-                                 id="newNameFilter"
-                                 placeholder="Enter filter"/>
-                </div>
-                <h2>add a new</h2>
-                <div>
-                    name: <input value={newName}
-                                 onChange = {inputNameChangeHandler}
-                                 id="newNameInput"
-                                 placeholder="Enter name"/>
-                </div>
-                <div>
-                    number: <input value={newNumber}
-                                   onChange = {inputPhoneChangeHandler}
-                                   id="newPhoneInput"
-                                   placeholder="Enter phone number"/>
-                </div>
-                <div>
-                    <button type="submit" onClick={addHandler}>add</button>
-                </div>
-            </form>
-            <h2>Numbers</h2>
-            <Name persons={persons} newFilter={newFilter}/>
-        </div>
+
+            <div>
+                <h2>Phonebook</h2>
+                <Filter handler={inputFilterChangeHandler} state={newFilter}/>
+                <h3>Add a new</h3>
+                <PersonForm newName={newName} newNumber={newNumber} addHandler={addHandler} nameHandler={inputNameChangeHandler} phoneHandler={inputPhoneChangeHandler} />
+                <h3>Numbers</h3>
+                <Persons listPersons={persons} state={newFilter}/>
+            </div>
   )
 }
 
