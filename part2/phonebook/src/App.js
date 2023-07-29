@@ -2,8 +2,9 @@ import { useState } from 'react'
 
 const Name = ({persons})=>{
     const result = persons.map((i,index) => {
-        return <div key ={index}>{i.name}</div>
+        return <div key ={index}>{i.name} {i.phone}</div>
     });
+
     console.log(persons)
     return(
         <>{result}</>
@@ -11,10 +12,11 @@ const Name = ({persons})=>{
 }
 const App = () => {
     const [persons, setPersons] = useState([
-        { name: 'Arto Hellas' }
+        { name: 'Arto Hellas',phone: '040-1234567' }
     ])
-
     const [newName, setNewName] = useState('')
+    const [newNumber, setNewNumber] = useState('')
+
 
     const addHandler = (event)=> {
         event.preventDefault()
@@ -28,19 +30,29 @@ const App = () => {
         if(check === false){
             return alert(newName + ' is already added to phonebook')
         }
-        else if (newName === ''){
-            return alert("Please insert the name")
+        else if (newName === '' || newNumber === ''){
+            return alert("Please insert the name and number")
         }else {
-            const copyArray = persons.concat({name: newName})
+            const tempObject = {
+                name: newName, phone: newNumber
+            }
+            const copyArray = persons.concat(tempObject)
             console.log("update persons state:", newName)
             console.log("reset newName state")
             setPersons(copyArray)
             setNewName('')
+            setNewNumber('')
         }
     }
-    const inputChangeHandler = (event) => {
+
+    const inputNameChangeHandler = (event) => {
         console.log("Change newName State:", event.target.value)
         setNewName(event.target.value)
+    }
+
+    const inputPhoneChangeHandler = (event) => {
+        console.log("Change newPhone State:", event.target.value)
+        setNewNumber(event.target.value)
     }
 
     return (
@@ -49,9 +61,15 @@ const App = () => {
             <form>
                 <div>
                     name: <input value={newName}
-                                 onChange = {inputChangeHandler}
+                                 onChange = {inputNameChangeHandler}
                                  id="newNameInput"
                                  placeholder="Enter name"/>
+                </div>
+                <div>
+                    number: <input value={newNumber}
+                                   onChange = {inputPhoneChangeHandler}
+                                   id="newPhoneInput"
+                                   placeholder="Enter phone number"/>
                 </div>
                 <div>
                     <button type="submit" onClick={addHandler}>add</button>
