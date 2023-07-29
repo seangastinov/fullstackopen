@@ -1,21 +1,31 @@
 import { useState } from 'react'
 
-const Name = ({persons})=>{
-    const result = persons.map((i,index) => {
-        return <div key ={index}>{i.name} {i.phone}</div>
+const Name = ({persons, newFilter})=>{
+    const numberToShow = (newFilter === '')
+        ? persons
+        : persons.filter(person =>
+            person.name.toLowerCase().includes(newFilter.toLowerCase()))
+    console.log('numberToShow:',numberToShow)
+
+    const result = numberToShow.map((i) => {
+        return <div key={i.id}>{i.name} {i.number}</div>
     });
 
-    console.log(persons)
+    console.log('persons:',persons)
     return(
         <>{result}</>
     )
 }
 const App = () => {
     const [persons, setPersons] = useState([
-        { name: 'Arto Hellas',phone: '040-1234567' }
+        { name: 'Arto Hellas', number: '040-123456', id: 1 },
+        { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+        { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+        { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
     ])
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
+    const [newFilter, setNewFilter] = useState('Ada Lovelace')
 
 
     const addHandler = (event)=> {
@@ -34,11 +44,13 @@ const App = () => {
             return alert("Please insert the name and number")
         }else {
             const tempObject = {
-                name: newName, phone: newNumber
+                name: newName, number: newNumber, id:persons[persons.length-1].id + 1
             }
+
             const copyArray = persons.concat(tempObject)
             console.log("update persons state:", newName)
             console.log("reset newName state")
+
             setPersons(copyArray)
             setNewName('')
             setNewNumber('')
@@ -55,10 +67,22 @@ const App = () => {
         setNewNumber(event.target.value)
     }
 
+    const inputFilterChangeHandler = (event) => {
+        console.log("Change newFilter State:", event.target.value)
+        setNewFilter(event.target.value)
+    }
+
     return (
         <div>
             <h2>Phonebook</h2>
             <form>
+                <div>
+                    filter shown with <input value={newFilter}
+                                 onChange = {inputFilterChangeHandler}
+                                 id="newNameFilter"
+                                 placeholder="Enter filter"/>
+                </div>
+                <h2>add a new</h2>
                 <div>
                     name: <input value={newName}
                                  onChange = {inputNameChangeHandler}
@@ -76,7 +100,7 @@ const App = () => {
                 </div>
             </form>
             <h2>Numbers</h2>
-            <Name persons={persons}/>
+            <Name persons={persons} newFilter={newFilter}/>
         </div>
   )
 }
