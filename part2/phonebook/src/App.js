@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
 const Name = ({persons})=>{
-    const result = persons.map((i) => {
-        return <div key ={i.name}>{i.name}</div>
+    const result = persons.map((i,index) => {
+        return <div key ={index}>{i.name}</div>
     });
     console.log(persons)
     return(
@@ -18,11 +18,25 @@ const App = () => {
 
     const addHandler = (event)=> {
         event.preventDefault()
-        const copyArray = persons.concat({name: newName})
-        console.log("update persons state:", newName)
-        console.log("reset newName state")
-        setPersons(copyArray)
-        setNewName('')
+        const check = persons.reduce((checker,current) =>{
+            console.log(checker,current)
+            if(current.name===newName) {
+                return false
+            }
+            },true)
+
+        if(check === false){
+            return alert(newName + ' is already added to phonebook')
+        }
+        else if (newName === ''){
+            return alert("Please insert the name")
+        }else {
+            const copyArray = persons.concat({name: newName})
+            console.log("update persons state:", newName)
+            console.log("reset newName state")
+            setPersons(copyArray)
+            setNewName('')
+        }
     }
     const inputChangeHandler = (event) => {
         console.log("Change newName State:", event.target.value)
