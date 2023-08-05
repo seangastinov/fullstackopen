@@ -1,4 +1,22 @@
-const Countries = ({newFind, countries}) => {
+import countryService from '/Users/seangastinov/WebstormProjects/fullstackopen/part2/countries/src/services/country.js'
+
+const Countries = ({newFind, countries, country, setCountry}) => {
+    const showHandler = (name) => {
+        if (country[name]) {
+            setCountry({ ...country, [name]: null })
+            console.log(`make ${name} null`)
+        } else {
+            countryService.getCountry(name)
+                .then((response) => {
+                    console.log('HTTP GET', response);
+                    setCountry({ ...country, [name]: response.data })
+                })
+                .catch((error) => {
+                    console.error('Error fetching country:', error);
+                });
+        }
+    };
+
     if(newFind === ''){
         return null
     }
@@ -39,12 +57,42 @@ const Countries = ({newFind, countries}) => {
 
         else{
             return ( countryToShow.map((i) => {
-                return (
-                    <div key={i.ccn3}>{i.name.common}</div>
+                if(country[i.name.common]) {
+                    return(
+                        <div key={i.ccn3}>{i.name.common}  <button
+                            type='button'
+                            onClick={()=> showHandler(i.name.common)}>
+                            show</button>
+                            <h1>{country[i.name.common].name.common}</h1>
+                            <>capital {country[i.name.common].capital}</>
+                            <br/>
+                            <>area {country[i.name.common].area}</>
+                            <p> <b>languages :</b> </p>
+                            <ul>
+                                {/*Returns an array of all the keys (language codes) from the languages object*/}
+                                {Object.keys(country[i.name.common].languages).map((langCode) => {
+                                    console.log('langCode', langCode)
+                                    return(
+                                        <li key={langCode}>
+                                            {country[i.name.common].languages[langCode]}
+                                        </li>
+                                    )}
+                                )}
+                            </ul>
+                            <img src={country[i.name.common].flags.png} alt='flag'/>
+                        </div>
+                    )
+                }
+                return(
+                    <div key={i.ccn3}>{i.name.common}  <button
+                        type='button'
+                        onClick={()=> showHandler(i.name.common)}>
+                        show</button>
+                    </div>
                 )
             }))
+            }
         }
-    }
 }
 
 export default Countries

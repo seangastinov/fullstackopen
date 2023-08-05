@@ -6,6 +6,7 @@ import Countries from "./components/Countries";
 function App() {
     const [newFind, setFind] = useState('')
     const [countries, setCountries] = useState([])
+    const [country, setCountry] = useState({})
 
     useEffect(() => {
         console.log('effect function is called')
@@ -16,8 +17,6 @@ function App() {
             })
     }, [])
 
-    console.log('countries has', countries.length, 'country')
-
     const findHandler = (event)=>{
         console.log('findHandler',event.target.value)
         setFind(event.target.value)
@@ -25,7 +24,7 @@ function App() {
   return (
     <div>
         <Find handler={findHandler} state={newFind}/>
-        <Countries countries={countries} newFind={newFind}/>
+        <Countries countries={countries} newFind={newFind} setCountry={setCountry} country={country}/>
     </div>
   )
 }
