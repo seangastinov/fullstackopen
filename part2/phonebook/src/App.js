@@ -10,7 +10,7 @@ const App = () => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [newFilter, setNewFilter] = useState('')
-    const [message, setMessage] = useState(null)
+    const [message, setMessage] = useState(['',''])
 
     useEffect(() => {
         console.log('effect function is called')
@@ -42,18 +42,28 @@ const App = () => {
         if(check === false){
             if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
                 const newObject = {...tryObject, number : newNumber}
+
                 personService.update(newObject.id,newObject)
                     .then((response) => {
-                        if(response.status === 200) {
-                            console.log('HTTP PUT', response)
-                            setPersons(persons.map(person => person.id !== response.data.id ? person : response.data))
-                            setMessage(`Added ${response.data.name}`)
-                            setTimeout(() => {
-                                setMessage(null)
-                            }, 5000)
-                        }
-                    })
+                        console.log('HTTP PUT', response)
+                        setPersons(persons.map(person => person.id !== response.data.id ? person : response.data))
+                        setMessage([`Added ${response.data.name}`, 'success']);
+                        setTimeout(() => {
+                            setMessage(['',''])
+                        }, 5000)})
 
+                    .catch((error)=>{
+                        console.log(error)
+                        setMessage([`Information of ${newName} has already been removed from server`, 'error'])
+                        setTimeout(() => {
+                            setMessage(['',''])
+                        }, 5000)
+                        personService.getAll()
+                            .then((returnedPersons) => {
+                                console.log('HTTP GET to update the removed person')
+                                setPersons(returnedPersons)
+                            })
+                    })
             }
         }
 
@@ -72,9 +82,9 @@ const App = () => {
                         setPersons(persons.concat(response.data))
                         setNewName('')
                         setNewNumber('')
-                        setMessage(`Added ${response.data.name}`)
+                        setMessage([`Added ${response.data.name}`, 'success']);
                         setTimeout(() => {
-                            setMessage(null)
+                            setMessage(['',''])
                         }, 5000)
                     }
                 })
@@ -99,7 +109,7 @@ const App = () => {
     return (
             <div>
                 <h2>Phonebook</h2>
-                <Notification message={message}/>
+                <Notification message={message[0]} type={message[1]}/>
                 <Filter handler={inputFilterChangeHandler} state={newFilter}/>
                 <h3>Add a new</h3>
                 <PersonForm newName={newName} newNumber={newNumber} addHandler={addHandler} nameHandler={inputNameChangeHandler} phoneHandler={inputPhoneChangeHandler} />
