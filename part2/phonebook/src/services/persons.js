@@ -19,11 +19,18 @@ const create = (newObject) => {
     )
 }
 const update = (id, newObject) => {
-    const request = axios.put(`${baseUrl}/${id}`, newObject)
-    return request.then(response => {
+    const promise = axios.put(`${baseUrl}/${id}`, newObject)
+    return promise.then(response => {
         console.log('HTTP PUT', response)
         return response.data
     })
 }
+const deletePerson = (id) => {
+    const promise = axios.delete(`${baseUrl}/${id}`)
+    return promise.then(response => {
+        console.log('HTTP DELETE', response)
+        return response.data
+    })
+}
 
-export default {getAll,create,update}
+export default {getAll,create,update, deletePerson}
