@@ -13,14 +13,13 @@ const App = () => {
     useEffect(() => {
         console.log('effect function is called')
         const eventHandler = response => {
-            console.log('promise fulfilled')
+            console.log('promise fulfilled', response)
             setPersons(response.data)
         }
         axios.get('http://localhost:3001/persons').then(eventHandler)
     }, [])
 
     console.log('phonebook has', persons.length, 'person')
-
 
     const addHandler = (event)=> {
         event.preventDefault()
@@ -42,16 +41,22 @@ const App = () => {
         }
         else{
             const tempObject = {
-                name: newName, number: newNumber, id:persons[persons.length-1].id + 1
+                name: newName, number: newNumber
             }
 
-            const copyArray = persons.concat(tempObject)
             console.log("update persons state:", newName)
             console.log("reset newName state")
 
-            setPersons(copyArray)
-            setNewName('')
-            setNewNumber('')
+            axios
+                .post('http://localhost:3001/persons', tempObject)
+                .then((response) => {
+                    console.log('add phones to server', response)
+                    const copyArray = persons.concat(response.data)
+                    setPersons(copyArray)
+                    setNewName('')
+                    setNewNumber('')
+                    }
+                )
         }
     }
 
