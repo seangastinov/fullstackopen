@@ -11,19 +11,10 @@ const getAll = () => {
 }
 
 const create = (newObject) => {
-    const promise = axios.post(baseUrl,newObject)
-    return promise.then((response) => {
-            console.log('HTTP POST', response)
-            return response.data
-        }
-    )
+    return axios.post(baseUrl,newObject)
 }
 const update = (id, newObject) => {
-    const promise = axios.put(`${baseUrl}/${id}`, newObject)
-    return promise.then(response => {
-        console.log('HTTP PUT', response)
-        return response.data
-    })
+    return axios.put(`${baseUrl}/${id}`, newObject)
 }
 const deletePerson = (id) => {
     const promise = axios.delete(`${baseUrl}/${id}`)
