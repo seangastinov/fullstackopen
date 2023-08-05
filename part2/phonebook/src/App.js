@@ -27,16 +27,26 @@ const App = () => {
             return alert("Please insert the name and number")
         }
 
+        let tryObject
         const check = persons.reduce((checker,person) =>{
             console.log(checker,person)
             if(person.name === newName) {
+                tryObject = person
                 return false
             }
             return checker
             },true)
 
         if(check === false){
-            return alert(newName + ' is already added to phonebook')
+            if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+                const newObject = {...tryObject, number : newNumber}
+                personService.update(newObject.id,newObject)
+                    .then((returnedPerson) => {
+                        console.log('update number', returnedPerson)
+                        setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson))
+                    })
+
+            }
         }
         else{
             const tempObject = {
