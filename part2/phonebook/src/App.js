@@ -1,8 +1,8 @@
 import {useEffect, useState} from 'react'
-import axios from 'axios'
 import Filter from './components/Filter'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
+import personService from './services/persons'
 
 const App = () => {
     const [persons, setPersons] = useState([])
@@ -12,11 +12,10 @@ const App = () => {
 
     useEffect(() => {
         console.log('effect function is called')
-        const eventHandler = response => {
-            console.log('promise fulfilled', response)
-            setPersons(response.data)
-        }
-        axios.get('http://localhost:3001/persons').then(eventHandler)
+        personService.getAll()
+            .then((initialPersons) => {  //initialPersons === response.data
+                setPersons(initialPersons)
+            })
     }, [])
 
     console.log('phonebook has', persons.length, 'person')
@@ -47,12 +46,9 @@ const App = () => {
             console.log("update persons state:", newName)
             console.log("reset newName state")
 
-            axios
-                .post('http://localhost:3001/persons', tempObject)
-                .then((response) => {
-                    console.log('add phones to server', response)
-                    const copyArray = persons.concat(response.data)
-                    setPersons(copyArray)
+            personService.create(tempObject)
+                .then((returnedPerson) =>{
+                    setPersons(persons.concat(returnedPerson))
                     setNewName('')
                     setNewNumber('')
                     }
