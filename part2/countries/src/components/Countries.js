@@ -1,6 +1,5 @@
 import countryService from '/Users/seangastinov/WebstormProjects/fullstackopen/part2/countries/src/services/country.js'
 import Weather from "./Weather";
-import {useEffect} from "react"
 import SingleCountry from "./SingleCountry";
 const Countries = ({newFind, countries, country, setCountry, weather, setWeather}) => {
     const showHandler = (name) => {
@@ -39,7 +38,7 @@ const Countries = ({newFind, countries, country, setCountry, weather, setWeather
                     <SingleCountry name={countryToShow[0].name.common} capital={countryToShow[0].capital}
                                languages={countryToShow[0].languages} area={countryToShow[0].area}
                                flag={countryToShow[0].flags.png}/>
-                    <Weather newFind={newFind} weather={weather} setWeather={setWeather} name={countryToShow[0].name.common}/>
+                    <Weather newFind={newFind} weather={weather} setWeather={setWeather} name={countryToShow[0].capital}/>
                 </div>
             )
         }

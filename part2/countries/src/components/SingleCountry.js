@@ -1,5 +1,4 @@
-const SingleCountry = ({name,capital, area,languages,flag, setWeather})=>{
-
+const SingleCountry = ({name,capital, area,languages,flag})=>{
     return (
         <div>
             <h1>{name}</h1>

@@ -13,19 +13,19 @@ const Weather = ({setWeather, weather, newFind, name})=>{
                 console.error('Error fetching country:', error)
             })
     }, [newFind])
-
     if (!weather) {
         return null
     }
     else {
+        const tempC = weather.main.temp-273
         return(
             <div>
-                <h1>Weather in {weather.location.name}</h1>
-                <>temperature {weather.current.temp_c} Celsius</>
+                <h1>Weather in {weather.name}</h1>
+                <>temperature {tempC.toFixed(2)} Celsius</>
                 <br/>
-                <img src={weather.current.condition.icon} alt='weather'/>
+                <img src={`https://openweathermap.org/img/wn/${ weather.weather[0].icon}@2x.png`} alt='weather'/>
                 <br/>
-                <>wind {weather.current.wind_kph} kph</>
+                <>wind {weather.wind.speed} m/s</>
             </div>
     )}
 }

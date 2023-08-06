@@ -9,9 +9,7 @@ const getCountry = (name) => {
 }
 
 const getWeather = (name, apiKey) => {
-    return axios.get(`http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${name}&aqi=no
-`)
-    //return axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=${apiKey}`)
+    return axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=${apiKey}`)
 }
 
 
