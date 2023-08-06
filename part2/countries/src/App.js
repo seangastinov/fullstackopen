@@ -7,6 +7,7 @@ function App() {
     const [newFind, setFind] = useState('')
     const [countries, setCountries] = useState([])
     const [country, setCountry] = useState({})
+    const [weather, setWeather] =useState(null)
 
     useEffect(() => {
         console.log('effect function is called')
@@ -24,7 +25,8 @@ function App() {
   return (
     <div>
         <Find handler={findHandler} state={newFind}/>
-        <Countries countries={countries} newFind={newFind} setCountry={setCountry} country={country}/>
+        <Countries countries={countries} newFind={newFind} setCountry={setCountry}
+                   country={country} setWeather={setWeather} weather={weather}/>
     </div>
   )
 }

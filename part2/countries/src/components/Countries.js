@@ -1,6 +1,8 @@
 import countryService from '/Users/seangastinov/WebstormProjects/fullstackopen/part2/countries/src/services/country.js'
-
-const Countries = ({newFind, countries, country, setCountry}) => {
+import Weather from "./Weather";
+import {useEffect} from "react"
+import SingleCountry from "./SingleCountry";
+const Countries = ({newFind, countries, country, setCountry, weather, setWeather}) => {
     const showHandler = (name) => {
         if (country[name]) {
             setCountry({ ...country, [name]: null })
@@ -34,62 +36,39 @@ const Countries = ({newFind, countries, country, setCountry}) => {
         else if(countryToShow.length === 1){
             return(
                 <div>
-                    <h1>{countryToShow[0].name.common}</h1>
-                    <>capital {countryToShow[0].capital}</>
-                    <br/>
-                    <>area {countryToShow[0].area}</>
-                    <p> <b>languages :</b> </p>
-                    <ul>
-                        {/*Returns an array of all the keys (language codes) from the languages object*/}
-                        {Object.keys(countryToShow[0].languages).map((langCode) => {
-                            console.log('langCode', langCode)
-                            return(
-                                <li key={langCode}>
-                                    {countryToShow[0].languages[langCode]}
-                                </li>
-                            )}
-                        )}
-                    </ul>
-                    <img src={countryToShow[0].flags.png} alt='flag'/>
+                    <SingleCountry name={countryToShow[0].name.common} capital={countryToShow[0].capital}
+                               languages={countryToShow[0].languages} area={countryToShow[0].area}
+                               flag={countryToShow[0].flags.png}/>
+                    <Weather newFind={newFind} weather={weather} setWeather={setWeather} name={countryToShow[0].name.common}/>
                 </div>
             )
         }
 
         else{
-            return ( countryToShow.map((i) => {
+            return (countryToShow.map((i) => {
                 if(country[i.name.common]) {
                     return(
                         <div key={i.ccn3}>{i.name.common}  <button
                             type='button'
                             onClick={()=> showHandler(i.name.common)}>
                             show</button>
-                            <h1>{country[i.name.common].name.common}</h1>
-                            <>capital {country[i.name.common].capital}</>
-                            <br/>
-                            <>area {country[i.name.common].area}</>
-                            <p> <b>languages :</b> </p>
-                            <ul>
-                                {/*Returns an array of all the keys (language codes) from the languages object*/}
-                                {Object.keys(country[i.name.common].languages).map((langCode) => {
-                                    console.log('langCode', langCode)
-                                    return(
-                                        <li key={langCode}>
-                                            {country[i.name.common].languages[langCode]}
-                                        </li>
-                                    )}
-                                )}
-                            </ul>
-                            <img src={country[i.name.common].flags.png} alt='flag'/>
+                            <SingleCountry name={country[i.name.common].name.common} capital={country[i.name.common].capital}
+                                           area={country[i.name.common].area} flag={country[i.name.common].flags.png}
+                                           languages={country[i.name.common].languages}/>
                         </div>
                     )
                 }
-                return(
-                    <div key={i.ccn3}>{i.name.common}  <button
-                        type='button'
-                        onClick={()=> showHandler(i.name.common)}>
-                        show</button>
-                    </div>
-                )
+                else {
+                    return (
+                        <div key={i.ccn3}>{i.name.common}
+                            <button
+                                type='button'
+                                onClick={() => showHandler(i.name.common)}>
+                                show
+                            </button>
+                        </div>
+                    )
+                }
             }))
             }
         }
