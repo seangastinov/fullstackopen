@@ -24,6 +24,8 @@ let persons =[
     }
 ]
 
+app.use(express.json()) //json-parser
+
 app.get('/api/info', (request, response) => {
     response.send(`<p>Phonebook has info for ${persons.length} people</p> ${new Date()}`)
 })
@@ -52,6 +54,13 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
+app.post('/api/persons', (request, response) => {
+    const person = request.body  //to make it readable json-parser is used
+    person.id = Math.floor(Math.random()*1000000000000000)
+    console.log('POST',person)
+    persons = persons.concat(person)
+    response.json(person)
+})
 const PORT = 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
