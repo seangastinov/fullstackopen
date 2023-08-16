@@ -56,10 +56,34 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
     const person = request.body  //to make it readable json-parser is used
-    person.id = Math.floor(Math.random()*1000000000000000)
-    console.log('POST',person)
-    persons = persons.concat(person)
-    response.json(person)
+    if(person.name && person.number){
+
+        const nameDuplicate = persons.reduce((accumulator, currentValue) => {
+            if(currentValue.name === person.name){
+                accumulator = 1
+                return accumulator
+            }else{
+                return accumulator
+            }
+        }, 0)
+
+        if(nameDuplicate === 0){
+            person.id = Math.floor(Math.random()*1000000000000000)
+            console.log('POST',person)
+            persons = persons.concat(person)
+            response.json(person)
+        }
+        else{
+            response.status(400).json({
+                error: 'name must be unique'
+            })
+        }
+
+    }else{
+        response.status(400).json({
+            error: 'content missing'
+        })
+    }
 })
 const PORT = 3001
 app.listen(PORT, () => {
