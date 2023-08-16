@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
+const cors = require('cors')
 
 let persons =[
     {
@@ -24,6 +25,8 @@ let persons =[
         "number": "39-23-6423122"
     }
 ]
+
+app.use(cors())
 app.use(express.json()) //json-parser
 
 const customLogFormat = (tokens, req, res) => {
@@ -33,7 +36,6 @@ const customLogFormat = (tokens, req, res) => {
     return `${tokens.method(req, res)} ${tokens.url(req, res)} ${tokens.status(req, res)} ${tokens.res(req, res, 'content-length')} - ${tokens['response-time'](req, res)} ms`;
 }
 app.use(morgan(customLogFormat))
-// app.use(morgan('tiny'))
 
 app.get('/api/info', (request, response) => {
     response.send(`<p>Phonebook has info for ${persons.length} people</p> ${new Date()}`)
