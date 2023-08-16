@@ -23,13 +23,18 @@ let persons =[
         "number": "39-23-6423122"
     }
 ]
+
+app.get('/api/info', (request, response) => {
+    response.send(`<p>Phonebook has info for ${persons.length} people</p> ${new Date()}`)
+})
+
 app.get('/api/persons', (request, response) => {
     response.json(persons)
 })
 
 app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
-    console.log('id:',id)
+    console.log('get id:',id)
     const person = persons.find((i) => i.id === id)
     console.log(person)
     if(person){
@@ -39,8 +44,12 @@ app.get('/api/persons/:id', (request, response) => {
     }
 })
 
-app.get('/api/info', (request, response) => {
-    response.send(`<p>Phonebook has info for ${persons.length} people</p> ${new Date()}`)
+app.delete('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    console.log('delete id:',id)
+    persons = persons.filter((i) => i.id !== id)
+
+    response.status(204).end()
 })
 
 const PORT = 3001
