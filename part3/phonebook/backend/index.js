@@ -5,8 +5,6 @@ const morgan = require('morgan')
 const cors = require('cors')
 const Person = require('./models/person')
 // const mongoose = require("mongoose");
-
-
 app.use(express.static('build')) //frontend static files inside backend
 
 // let persons =[

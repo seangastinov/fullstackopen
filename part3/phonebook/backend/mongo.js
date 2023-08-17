@@ -1,3 +1,5 @@
+//THIS FILE IS HAVE NO CONNECTION WITH OUR BACKEND AS WE MOVE MONGOOSE MODEL INTO ITS OWN MODULE
+
 const mongoose = require('mongoose')
 
 if (process.argv.length<3) {
