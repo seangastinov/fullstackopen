@@ -3,7 +3,7 @@ const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
 
-app.use(express.static('build'))
+app.use(express.static('build')) //frontend static files inside backend
 
 let persons =[
     {
@@ -28,7 +28,7 @@ let persons =[
     }
 ]
 
-app.use(cors())
+app.use(cors())  // doesn't apply as our frontend and backend in the same port
 app.use(express.json()) //json-parser
 
 const customLogFormat = (tokens, req, res) => {

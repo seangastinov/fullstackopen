@@ -6,13 +6,16 @@
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "build:ui": "rm -rf build && cd /Users/seangastinov/WebstormProjects/fullstackopen/part3/phonebook/frontend/build && npm run build && cp -r build /Users/seangastinov/WebstormProjects/fullstackopen/part3/phonebook/backend",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
   },
   "author": "Sean Gastinov Soeandi",
   "license": "NTU",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "mongoose": "^7.4.3",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
