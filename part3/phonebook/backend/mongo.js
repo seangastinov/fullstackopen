@@ -30,7 +30,7 @@ if(process.argv[3] && process.argv[4]){
     })
 }
 else{
-    Person.find({}).then(result => {  //find object in Person model, result is array
+    Person.find({}).then(result => {  //find object in Person model, result is array of object
         console.log('phonebook:')
         result.forEach(person => {
             console.log(person.name, person.number)
