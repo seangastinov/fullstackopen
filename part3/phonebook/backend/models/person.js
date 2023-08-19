@@ -19,6 +19,7 @@ const personSchema = new mongoose.Schema({
     number: String,
 })
 
+//IDK THIS IS NOT WORKING
 personSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()

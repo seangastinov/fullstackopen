@@ -1,10 +1,9 @@
 require('dotenv').config()
+const Person = require('./models/person')
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
-const Person = require('./models/person')
-// const mongoose = require("mongoose");
 app.use(express.static('build')) //frontend static files inside backend
 
 // let persons =[
@@ -66,11 +65,9 @@ app.get('/api/persons/:id', (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    console.log('del id:',id)
-    persons = persons.filter((i) => i.id !== id)
-
-    response.status(204).end()
+    Person.deleteOne({_id: request.params.id}).then(deletedPerson => {
+        response.status(204).end()
+    })
 })
 
 app.post('/api/persons', (request, response) => {

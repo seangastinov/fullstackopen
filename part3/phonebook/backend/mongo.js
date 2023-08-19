@@ -8,7 +8,7 @@ if (process.argv.length<3) {
 }
 
 const password = process.argv[2]
-const uri = `mongodb+srv://seangastinov:${password}@cluster0.jlj9mzh.mongodb.net/personApp?retryWrites=true&w=majority`
+const uri = `mongodb+srv://seangastinov:${password}@cluster0.ia7nird.mongodb.net/personApp?retryWrites=true&w=majority`
 
 mongoose.set('strictQuery',false)
 mongoose.connect(uri)
@@ -16,9 +16,11 @@ mongoose.connect(uri)
 const personSchema = new mongoose.Schema({
     name: String,
     number: String,
-})
+    })
 
-const Person = mongoose.model('Person', personSchema)
+
+
+const Person= mongoose.model('Person', personSchema)
 
 if(process.argv[3] && process.argv[4]){
     const person = new Person({
@@ -27,7 +29,7 @@ if(process.argv[3] && process.argv[4]){
     })
 
     person.save().then(result => {
-        console.log('added',result.name,'number', result.number, 'to phonebook')
+        console.log('added',result.name,'number', result.number, 'to phonebook', result.id, result.__v)
         mongoose.connection.close()
     })
 }

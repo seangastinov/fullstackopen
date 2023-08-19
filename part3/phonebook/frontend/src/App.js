@@ -77,9 +77,9 @@ const App = () => {
             console.log("reset newName state")
 
             personService.create(tempObject)
-                .then((response) => {
+                .then((response) => {  //response is the variable that is returned in the backend
                     console.log('HTTP POST', response)
-                    if (response.status === 200) {
+                    if (response.status === 200) {  //update the state
                         setPersons(persons.concat(response.data))
                         setNewName('')
                         setNewNumber('')
