@@ -43,7 +43,7 @@ const App = () => {
             if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
                 const newObject = {...tryObject, number : newNumber}
                 personService.update(newObject.id,newObject)
-                    .then((response) => {
+                    .then((response) => { //response is what we get from the backend's index.js by response.json(person)
                         setPersons(persons.map(person => person.id !== response.data.id ? person : response.data))
                         setMessage([`Added ${response.data.name}`, 'success']);
                         setTimeout(() => {
