@@ -19,12 +19,13 @@ const personSchema = new mongoose.Schema({
     number: String,
 })
 
-//IDK THIS IS NOT WORKING
+//This transform function is called ONLY when person.toJSON() is executed in index.js
 personSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()
         delete returnedObject._id
         delete returnedObject.__v
+        console.log('This transform function is called')
     }
 })
 

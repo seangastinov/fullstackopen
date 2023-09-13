@@ -4,31 +4,8 @@ const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
+//build file must be inside backend repo
 app.use(express.static('build')) //frontend static files inside backend
-
-// let persons =[
-//     {
-//         "id": 1,
-//         "name": "Arto Hellas",
-//         "number": "040-123456"
-//     },
-//     {
-//         "id": 2,
-//         "name": "Ada Lovelace",
-//         "number": "39-44-5323523"
-//     },
-//     {
-//         "id": 3,
-//         "name": "Dan Abramov",
-//         "number": "12-43-234345"
-//     },
-//     {
-//         "id": 4,
-//         "name": "Mary Poppendieck",
-//         "number": "39-23-6423122"
-//     }
-// ]
-
 app.use(cors())  // doesn't apply as our frontend and backend in the same port
 app.use(express.json()) //json-parser
 
@@ -48,20 +25,20 @@ app.get('/api/info', (request, response) => {
 
 app.get('/api/persons', (request, response) => {
     Person.find({}).then(persons => {
-        response.json(persons)
+        response.json(persons)  //response.json() it will call toJSON transform function we defined in our schema options
     })
 })
 
-app.get('/api/persons/:id', (request, response) => {
-    Person.findById(request.params.id).then(person => {
-        console.log(person)
-        response.json(person)
+app.get('/api/persons/:id', (request, response,next) => {
+    Person.findById(request.params.id)
+        .then(person => {
+        if (person){
+            response.json(person)
+        }else{
+            response.status(404).end()
+        }
     })
-    // if(person){
-    //     response.json(person)
-    // }else{
-    //     response.status(404).end()
-    // }
+        .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -80,8 +57,9 @@ app.post('/api/persons', (request, response) => {
         name: body.name,
         number: body.number
     })
+
     person.save().then(savedPerson => {
-        console.log('HTTP POST is SUCCESSFUL', savedPerson)
+        console.log('HTTP POST is SUCCESSFUL', savedPerson.toJSON())
         response.json(savedPerson)  //to send to the frontend
     })
     // if(person.name && person.number){
@@ -113,7 +91,17 @@ app.post('/api/persons', (request, response) => {
     //     })
     // }
 })
+
 const PORT = process.env.PORT || 3001  //if environment variable is undefined we use 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
+
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message)
+    if (error.name === 'CastError') {
+        return response.status(400).send({ error: 'malformatted id' })
+    }
+    next(error)
+}
+app.use(errorHandler) // this has to be the last loaded middleware.
