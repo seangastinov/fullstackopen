@@ -40,32 +40,29 @@ const App = () => {
             },true)
 
         if(check === false){
-            return alert(`${newName} is already added to phonebook`)
-            // if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
-            //     const newObject = {...tryObject, number : newNumber}
-            //
-            //     personService.update(newObject.id,newObject)
-            //         .then((response) => {
-            //             console.log('HTTP PUT', response)
-            //             setPersons(persons.map(person => person.id !== response.data.id ? person : response.data))
-            //             setMessage([`Added ${response.data.name}`, 'success']);
-            //             setTimeout(() => {
-            //                 setMessage(['',''])
-            //             }, 5000)})
-            //
-            //         .catch((error)=>{
-            //             console.log(error)
-            //             setMessage([`Information of ${newName} has already been removed from server`, 'error'])
-            //             setTimeout(() => {
-            //                 setMessage(['',''])
-            //             }, 5000)
-            //             personService.getAll()
-            //                 .then((returnedPersons) => {
-            //                     console.log('HTTP GET to update the removed person')
-            //                     setPersons(returnedPersons)
-            //                 })
-            //         })
-            // }
+            if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+                const newObject = {...tryObject, number : newNumber}
+                personService.update(newObject.id,newObject)
+                    .then((response) => {
+                        setPersons(persons.map(person => person.id !== response.data.id ? person : response.data))
+                        setMessage([`Added ${response.data.name}`, 'success']);
+                        setTimeout(() => {
+                            setMessage(['',''])
+                        }, 5000)})
+
+                    .catch((error)=>{
+                        console.log(error)
+                        setMessage([`Information of ${newName} has already been removed from server`, 'error'])
+                        setTimeout(() => {
+                            setMessage(['',''])
+                        }, 5000)
+                        personService.getAll()
+                            .then((returnedPersons) => {
+                                console.log('HTTP GET to update the removed person')
+                                setPersons(returnedPersons)
+                            })
+                    })
+            }
         }
 
         else{

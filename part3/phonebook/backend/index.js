@@ -62,35 +62,22 @@ app.post('/api/persons', (request, response) => {
         console.log('HTTP POST is SUCCESSFUL', savedPerson.toJSON())
         response.json(savedPerson)  //to send to the frontend
     })
-    // if(person.name && person.number){
-    //
-    //     const nameDuplicate = persons.reduce((accumulator, currentValue) => {
-    //         if(currentValue.name === person.name){
-    //             accumulator = 1
-    //             return accumulator
-    //         }else{
-    //             return accumulator
-    //         }
-    //     }, 0)
-    //
-    //     if(nameDuplicate === 0){
-    //         person.id = Math.floor(Math.random()*1000000000000000)
-    //         console.log('POST',person)
-    //         persons = persons.concat(person)
-    //         response.json(person)
-    //     }
-    //     else{
-    //         response.status(400).json({
-    //             error: 'name must be unique'
-    //         })
-    //     }
-    //
-    // }else{
-    //     response.status(400).json({
-    //         error: 'content missing'
-    //     })
-    // }
 })
+
+app.put('/api/persons/:id', (request, response) => {
+    Person.findByIdAndUpdate(request.params.id, {number : request.body.number})
+            .then(person => {
+                if (person){
+                    //NEED TO CHANGE THIS BECAUSE UPDATING ON MONGODB IS HAPPEN AFTER THIS FUNCTION ENDED
+                    //SO WE NEED TO CHANGE THE UPDATED VERSION FIRST BEFORE SENT IT TO FRONT END
+                    person.number = request.body.number
+                    response.json(person) //Send to frontend
+                }else{
+                response.status(404).end()
+                }
+        })
+    }
+)
 
 const PORT = process.env.PORT || 3001  //if environment variable is undefined we use 3001
 app.listen(PORT, () => {
