@@ -11,9 +11,9 @@ app.use(express.json()) //json-parser
 
 const customLogFormat = (tokens, req, res) => {
     if(tokens.method(req, res) === 'POST'){
-        return `${tokens.method(req, res)} ${tokens.url(req, res)} ${tokens.status(req, res)} ${tokens.res(req, res, 'content-length')} - ${tokens['response-time'](req, res)} ms {"name":"${req.body.name}","number":"${req.body.number}"}`;
+        return `${tokens.method(req, res)} ${tokens.url(req, res)} ${tokens.status(req, res)} ${tokens.res(req, res, 'content-length')} - ${tokens['response-time'](req, res)} ms {"name":"${req.body.name}","number":"${req.body.number}"}`
     }
-    return `${tokens.method(req, res)} ${tokens.url(req, res)} ${tokens.status(req, res)} ${tokens.res(req, res, 'content-length')} - ${tokens['response-time'](req, res)} ms`;
+    return `${tokens.method(req, res)} ${tokens.url(req, res)} ${tokens.status(req, res)} ${tokens.res(req, res, 'content-length')} - ${tokens['response-time'](req, res)} ms`
 }
 app.use(morgan(customLogFormat))
 
@@ -32,17 +32,17 @@ app.get('/api/persons', (request, response) => {
 app.get('/api/persons/:id', (request, response,next) => {
     Person.findById(request.params.id)
         .then(person => {
-        if (person){
-            response.json(person)
-        }else{
-            response.status(404).end()
-        }
-    })
+            if (person){
+                response.json(person)
+            }else{
+                response.status(404).end()
+            }
+        })
         .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
-    Person.findByIdAndDelete(request.params.id).then(deletedPerson =>{
+    Person.findByIdAndDelete(request.params.id).then(()=> {
         response.status(204).end()
     })
         .catch(error => next(error))  //delete object that not exist will have error.name === CastError
@@ -68,18 +68,17 @@ app.post('/api/persons', (request, response,next) => {
 
 app.put('/api/persons/:id', (request, response) => {
     Person.findByIdAndUpdate(request.params.id, {number : request.body.number})
-            .then(person => {
-                if (person){
-                    //NEED TO CHANGE THIS BECAUSE UPDATING ON MONGODB IS HAPPEN AFTER THIS FUNCTION ENDED
-                    //SO WE NEED TO CHANGE THE UPDATED VERSION FIRST BEFORE SENT IT TO FRONT END
-                    person.number = request.body.number
-                    response.json(person) //Send to frontend
-                }else{
+        .then(person => {
+            if (person){
+                //NEED TO CHANGE THIS BECAUSE UPDATING ON MONGODB IS HAPPEN AFTER THIS FUNCTION ENDED
+                //SO WE NEED TO CHANGE THE UPDATED VERSION FIRST BEFORE SENT IT TO FRONT END
+                person.number = request.body.number
+                response.json(person) //Send to frontend
+            }else{
                 response.status(404).end()
-                }
+            }
         })
-    }
-)
+})
 
 const PORT = process.env.PORT || 3001  //if environment variable is undefined we use 3001
 app.listen(PORT, () => {
@@ -92,7 +91,7 @@ const errorHandler = (error, request, response, next) => {
         return response.status(400).send({ error: 'malformatted id' })
     }
     else if (error.name === 'ValidationError'){
-        console.error(error.message);
+        console.error(error.message)
         return response.status(403).send(error.message)
     }
     next(error)

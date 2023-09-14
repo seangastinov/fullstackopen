@@ -16,7 +16,7 @@ mongoose.connect(uri)
 const personSchema = new mongoose.Schema({
     name: String,
     number: String,
-    })
+})
 
 
 
