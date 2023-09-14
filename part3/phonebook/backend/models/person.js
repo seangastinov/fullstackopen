@@ -15,7 +15,10 @@ mongoose.connect(uri)
     })
 
 const personSchema = new mongoose.Schema({
-    name: String,
+    name: {
+        type: String,
+        minlength: [3, 'Path \'name\' (\'{VALUE}\') is shorter than the minimum allowed length (3).'],
+    },
     number: String,
 })
 

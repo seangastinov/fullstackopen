@@ -45,10 +45,10 @@ app.delete('/api/persons/:id', (request, response, next) => {
     Person.findByIdAndDelete(request.params.id).then(deletedPerson =>{
         response.status(204).end()
     })
-        .catch(error => next(error))
+        .catch(error => next(error))  //delete object that not exist will have error.name === CastError
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response,next) => {
     const body = request.body  //to make it readable json-parser is used
     if (body === undefined) {
         return response.status(400).json({ error: 'content missing' })
@@ -63,6 +63,7 @@ app.post('/api/persons', (request, response) => {
         console.log('HTTP POST is SUCCESSFUL', savedPerson.toJSON())
         response.json(savedPerson)  //to send to the frontend
     })
+        .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response) => {
@@ -86,9 +87,12 @@ app.listen(PORT, () => {
 })
 
 const errorHandler = (error, request, response, next) => {
-    console.error(error.message)
     if (error.name === 'CastError') {
+        console.log(error.name)
         return response.status(400).send({ error: 'malformatted id' })
+    }
+    else if (error.name === 'ValidationError'){
+        return response.status(403).send(error.message)
     }
     next(error)
 }
