@@ -17,9 +17,24 @@ mongoose.connect(uri)
 const personSchema = new mongoose.Schema({
     name: {
         type: String,
-        minlength: [3, 'Path \'name\' (\'{VALUE}\') is shorter than the minimum allowed length (3).'],
+        minlength: [3, 'Path \'name\' (\'{VALUE}\') is shorter than the minimum allowed length (3)'],
     },
-    number: String,
+    number: {
+        type : String,
+        validate : {
+            validator: value => {
+                if(value.length>=8){
+                    const regex = /^\d{2,3}-\d+$/
+                    return regex.test(value)
+                }
+                else{
+                    return false
+                }
+            },
+            message: 'Path \'number\' (\'{VALUE}\') is must has length of 8 or more, and' +
+            ' the first part has two or three numbers and the second part also consists of numbers and seperated by \'-\'.'
+        }
+    }
 })
 
 //This transform function is called ONLY when person.toJSON() is executed in index.js
